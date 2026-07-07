@@ -1,0 +1,12 @@
+node_modules/
+.next/
+__pycache__/
+*.pyc
+.env
+.env.local
+.env.*.local
+.venv/
+venv/
+data/*.geojson
+data_synthetic_backup/
+!data/.gitkeep

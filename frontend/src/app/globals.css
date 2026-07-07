@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 60 12% 97%;
+    --foreground: 0 0% 4%;
+    --card: 60 20% 99%;
+    --card-foreground: 0 0% 4%;
+    --primary: 211 68% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 60 8% 92%;
+    --secondary-foreground: 40 3% 32%;
+    --muted: 60 8% 92%;
+    --muted-foreground: 45 3% 45%;
+    --accent: 60 8% 90%;
+    --accent-foreground: 0 0% 4%;
+    --border: 55 12% 87%;
+    --input: 55 12% 84%;
+    --ring: 211 68% 50%;
+    --radius: 0.6rem;
+
+    --buildable: #0a8a0a;
+    --excluded: #c22f2f;
+  }
+
+  .dark {
+    --background: 60 3% 5%;
+    --foreground: 0 0% 100%;
+    --card: 60 2% 10%;
+    --card-foreground: 0 0% 100%;
+    --primary: 211 79% 56%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 60 2% 16%;
+    --secondary-foreground: 51 8% 74%;
+    --muted: 60 2% 16%;
+    --muted-foreground: 45 3% 52%;
+    --accent: 60 2% 18%;
+    --accent-foreground: 0 0% 100%;
+    --border: 60 3% 17%;
+    --input: 60 3% 20%;
+    --ring: 211 79% 56%;
+
+    --buildable: #0ca30c;
+    --excluded: #d03b3b;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html,
+  body {
+    height: 100%;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.maplibregl-ctrl-attrib {
+  font-size: 10px;
+}
+
+.mapboxgl-ctrl-attrib,
+.mapbox-gl-draw_ctrl-draw-btn {
+  display: none;
+}

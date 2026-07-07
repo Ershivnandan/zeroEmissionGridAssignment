@@ -1,0 +1,20 @@
+FROM node:20-slim
+
+WORKDIR /app
+
+COPY package.json ./
+RUN npm install
+
+COPY . .
+
+ARG NEXT_PUBLIC_API_BASE=http://localhost:8000/api/v1
+ARG NEXT_PUBLIC_MAPTILER_KEY=""
+ARG NEXT_PUBLIC_MAP_TILE_URL=https://api.maptiler.com/tiles/satellite-v2/{z}/{x}/{y}.jpg
+ENV NEXT_PUBLIC_API_BASE=$NEXT_PUBLIC_API_BASE
+ENV NEXT_PUBLIC_MAPTILER_KEY=$NEXT_PUBLIC_MAPTILER_KEY
+ENV NEXT_PUBLIC_MAP_TILE_URL=$NEXT_PUBLIC_MAP_TILE_URL
+RUN npm run build
+
+EXPOSE 3000
+
+CMD ["npm", "start"]

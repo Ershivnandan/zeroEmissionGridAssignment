@@ -1,0 +1,41 @@
+constraints:
+  - key: wetlands
+    label: Wetlands (NWI)
+    table: wetlands
+    default_setback_m: 30.48
+    enabled: true
+    source: >
+      USFWS National Wetlands Inventory. A 100 ft (30.48 m) vegetated buffer is a
+      common regulatory default drawn from EPA/USACE guidance and many local ordinances
+      for wetland protection; treated here as a sensible starting default, not a
+      jurisdiction-specific rule.
+
+  - key: floodplain
+    label: FEMA 100-yr Floodplain
+    table: floodplain
+    default_setback_m: 0.0
+    enabled: true
+    source: >
+      FEMA National Flood Hazard Layer, Special Flood Hazard Area (Zone A/AE, 1% annual
+      chance). The floodplain itself is the constraint; default setback is 0 m beyond the
+      mapped zone. Increase if a freeboard buffer is desired.
+
+  - key: transmission
+    label: Transmission Line Easements
+    table: transmission
+    default_setback_m: 30.48
+    enabled: true
+    source: >
+      Transmission line centerlines buffered by a half-easement width. Typical high-voltage
+      transmission easements run 100-150 ft total width; 100 ft (30.48 m) each side is used
+      as a conservative default half-width. Source: common utility ROW standards (e.g. ERCOT/
+      utility easement practice).
+
+  - key: buildings
+    label: Existing Building Footprints
+    table: buildings
+    default_setback_m: 3.0
+    enabled: true
+    source: >
+      Existing structure footprints (Microsoft/OSM building footprints) plus a 3 m clearance
+      setback representing a minimal separation/access margin around existing structures.
