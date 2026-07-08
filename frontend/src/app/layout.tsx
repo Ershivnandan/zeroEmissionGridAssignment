@@ -4,6 +4,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import { QueryProvider } from "@/components/QueryProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { Toaster } from "@/components/Toaster";
 
 export const metadata: Metadata = {
   title: "Buildable Land Analysis",
@@ -20,6 +21,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <QueryProvider>{children}</QueryProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

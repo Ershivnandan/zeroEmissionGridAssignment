@@ -22,6 +22,7 @@ import { ConstraintInfo, ConstraintOverride } from "@/lib/api";
 import { useParcels } from "@/hooks/queries/useParcels";
 import { useConstraints } from "@/hooks/queries/useConstraints";
 import { useComputeBuildable } from "@/hooks/queries/useComputeBuildable";
+import { useColdStartToast } from "@/hooks/common/useColdStartToast";
 import type { DrawMode, MapActions } from "@/components/MapView";
 import { StatTile } from "@/components/StatTile";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -103,6 +104,7 @@ export default function Page() {
   );
 
   const useDrawn = parcelSource !== "sample";
+  const hasParcel = useDrawn ? Boolean(drawnParcel) : Boolean(selectedParcel);
   const computeQuery = useComputeBuildable({
     parcel_id: useDrawn ? undefined : selectedParcel || undefined,
     parcel_geometry: useDrawn ? drawnParcel ?? undefined : undefined,
@@ -111,13 +113,15 @@ export default function Page() {
     restores: restores.map((f) => ({ geometry: f.geometry })),
   });
 
-  const result = computeQuery.data;
+  const result = hasParcel ? computeQuery.data : undefined;
   const busy =
     computeQuery.isFetching ||
     parcelsQuery.isLoading ||
     constraintsQuery.isLoading;
   const error =
     parcelsQuery.error || constraintsQuery.error || computeQuery.error;
+
+  useColdStartToast(busy);
 
   const onDrawChange = useCallback(
     (c: GeoJSON.Feature[], r: GeoJSON.Feature[]) => {
@@ -519,6 +523,43 @@ export default function Page() {
               <Eraser className="h-3.5 w-3.5" />
             </Button>
           </div>
+
+          <AnimatePresence>
+            {drawMode && (
+              <motion.div
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                className="absolute left-1/2 top-16 flex max-w-[90vw] -translate-x-1/2 flex-wrap items-center justify-center gap-2 rounded-lg border border-border bg-card/95 px-3 py-2 text-xs shadow-lg backdrop-blur"
+              >
+                <span className="text-muted-foreground">
+                  Click points · double-click to finish
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => mapActions.current?.undoLastPoint()}
+                >
+                  <Undo2 className="h-3.5 w-3.5" /> Undo
+                </Button>
+                {drawMode === "parcel" && drawnParcel && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      mapActions.current?.clearParcel();
+                      setDrawnParcel(null);
+                    }}
+                  >
+                    <Trash2 className="h-3.5 w-3.5" /> Clear
+                  </Button>
+                )}
+                <Button variant="ghost" size="sm" onClick={() => setDrawMode(null)}>
+                  Done
+                </Button>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="pointer-events-none absolute bottom-4 left-4 rounded-lg border border-border bg-card/90 px-3 py-2 text-xs backdrop-blur">
             <div className="mb-1 flex items-center gap-2">

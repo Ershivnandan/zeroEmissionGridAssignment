@@ -35,6 +35,7 @@ export interface MapActions {
   deleteSelected: () => void;
   clearAll: () => void;
   clearParcel: () => void;
+  undoLastPoint: () => void;
 }
 
 const DRAW_STYLES = [
@@ -109,7 +110,18 @@ export default function MapView({
   const applyResult = useCallback((fit: boolean) => {
     const map = mapRef.current;
     const res = resultRef.current;
-    if (!map || !readyRef.current || !res) return;
+    if (!map || !readyRef.current) return;
+
+    if (!res) {
+      (map.getSource("parcel") as maplibregl.GeoJSONSource)?.setData(emptyFC());
+      (map.getSource("buildable") as maplibregl.GeoJSONSource)?.setData(
+        emptyFC()
+      );
+      (map.getSource("excluded") as maplibregl.GeoJSONSource)?.setData(
+        emptyFC()
+      );
+      return;
+    }
 
     (map.getSource("parcel") as maplibregl.GeoJSONSource)?.setData(
       res.parcel_geojson as GeoJSON.Feature
@@ -252,6 +264,10 @@ export default function MapView({
             }
           }
           emit();
+        },
+        undoLastPoint: () => {
+          const d = draw as unknown as { trash: () => void };
+          d.trash();
         },
       });
 
